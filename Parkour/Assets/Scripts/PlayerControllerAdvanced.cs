@@ -9,7 +9,7 @@ public class PlayerControllerAdvanced : MonoBehaviour {
 	float verticalRotation = 0f;
 
 	public int maxJumps = 2;
-	int jumps = 0;
+	public int jumps = 0;
 	void Start () {
 		rcc = gameObject.GetComponent<RigidbodyCharactorController> ();
 		rcc.maxSpeed = 5f;
@@ -52,5 +52,9 @@ public class PlayerControllerAdvanced : MonoBehaviour {
 		rcc.Move (moveVector);
 		
 		
+	}
+
+	public Camera getCamera(){
+		return camera;
 	}
 }

@@ -2,10 +2,13 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\RigidbodyCharactorController.cs">
     <Files>
-      <File FileName="Assets\Scripts\RigidbodyCharactorController.cs" Line="88" Column="3" />
-      <File FileName="Assets\Scripts\CharactorControls.cs" Line="34" Column="65" />
-      <File FileName="Assets\Scripts\CharacorCameraController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerController.cs" Line="13" Column="21" />
+      <File FileName="Assets\Scripts\RigidbodyCharactorController.cs" Line="108" Column="73" />
+      <File FileName="Assets\Scripts\PlayerController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerControllerAdvanced.cs" Line="12" Column="9" />
+      <File FileName="Assets\Scripts\GunController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GrappleController.cs" Line="86" Column="93" />
+      <File FileName="Assets\Scripts\RopeScript.cs" Line="165" Column="65" />
+      <File FileName="Assets\Scripts\RopeController.cs" Line="31" Column="24" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

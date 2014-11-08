@@ -6,7 +6,7 @@ public class RigidbodyCharactorController : MonoBehaviour {
 	public bool _FullStop = true;			// When grounded and not attempting to move forward charactor should stop immediately (rather then physics which would gradually slow you)
 
 	bool _moving = false;
-	float verticalVelocity = 0f;
+	public float verticalVelocity = 0f;
 	float distToGround, distToSide;
 	float GRAVITY = 100f;
 	public bool _leftWall = false, _rightWall = false, _grounded = false;
@@ -76,6 +76,7 @@ public class RigidbodyCharactorController : MonoBehaviour {
 		} else {
 			rigidbody.drag = 0.0f;
 			verticalVelocity += (Physics.gravity.y * GRAVITY) * Time.deltaTime;
+			//Debug.Log("Vet"+verticalVelocity);
 		}
 
 
