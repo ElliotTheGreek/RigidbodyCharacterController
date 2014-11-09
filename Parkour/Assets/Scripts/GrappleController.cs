@@ -55,6 +55,14 @@ public class GrappleController : MonoBehaviour {
 		rigidbody.transform.parent = gun.transform;
 	}
 
+	public void ButtonFire(){
+		if(_canFire){
+			Fire ();
+		} else {
+			ResetGrapple();
+		}
+	}
+
 	void Fire(){
 	//	lineRender.enabled = true;
 		gun.SetAnimation (false);
