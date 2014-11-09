@@ -8,7 +8,7 @@ public class PlayerControllerAdvanced : MonoBehaviour {
 	float verticalAngleLimit = 90.0f;
 	float verticalRotation = 0f;
 
-	public int maxJumps = 2;
+	public int maxJumps = 3;
 	public int jumps = 0;
 	void Start () {
 		rcc = gameObject.GetComponent<RigidbodyCharactorController> ();
@@ -34,7 +34,7 @@ public class PlayerControllerAdvanced : MonoBehaviour {
 				jumps++;
 			} else {
 				if(jumps<maxJumps){
-					rcc.Jump(500, 0.5f);
+					rcc.Jump(500, 0.9f);
 					jumps++;
 				}
 			}
@@ -42,7 +42,7 @@ public class PlayerControllerAdvanced : MonoBehaviour {
 		
 		/* Movement control */
 		float moveForce = 4f;
-		if(!rcc.IsGrounded()){moveForce = 0.2f;}	// reduce player control greatly if in the air ( 0 is most realistic )
+		if(!rcc.IsGrounded()){moveForce = 0.1f;}	// reduce player control greatly if in the air ( 0 is most realistic )
 		float forwardSpeed = Input.GetAxis ("Vertical") * moveForce;
 		float sideSpeed = Input.GetAxis ("Horizontal") * moveForce;
 		

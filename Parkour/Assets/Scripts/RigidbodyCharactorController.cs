@@ -74,7 +74,7 @@ public class RigidbodyCharactorController : MonoBehaviour {
 				if(!_moving){rigidbody.drag = 20;} else {rigidbody.drag = 0.5f;}
 			}
 		} else {
-			rigidbody.drag = 0.0f;
+			rigidbody.drag = 0.1f;
 			verticalVelocity += (Physics.gravity.y * GRAVITY) * Time.deltaTime;
 			//Debug.Log("Vet"+verticalVelocity);
 		}
@@ -84,8 +84,9 @@ public class RigidbodyCharactorController : MonoBehaviour {
 		Vector3 gravity = new Vector3(0, verticalVelocity, 0);
 		rigidbody.AddForce (gravity);
 		verticalVelocity = 0;
-
-		LimitSpeed ();
+		if(_grounded){
+			LimitSpeed ();
+		}
 	}
 
 	public void Move(Vector3 move){
