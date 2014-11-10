@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class Explosion : MonoBehaviour {
-	float radius = 5f;
-	float power = 25f;
+	float radius = 16f;
+	float power = 90f;
 
 	void Start () {
 		Boom ();
