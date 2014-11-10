@@ -5,21 +5,23 @@ public class GameController : MonoBehaviour {
 
 	public string platform = "Desktop";
 	public GameObject UIDesktop, UIAndroid;
-	public Vector3 accelCenter = new Vector3(0,0,0);
 
 	void Start () {
 		if (Application.platform == RuntimePlatform.Android){
 			platform = "Android";
-			UIAndroid.SetActive(true);
-			UIDesktop.SetActive(false);
+			EnableUI("UI-Android", true);
+			EnableUI("UI-Desktop", false);
 		} else {
 			platform = "Desktop";
-			UIAndroid.SetActive(false);
-			UIDesktop.SetActive(true);
+			EnableUI("UI-Desktop", true);
+			EnableUI("UI-Android", false);
 		}
 	}
 
-	public void Calibrate(){
-		accelCenter = Input.acceleration;
+	void EnableUI(string tag, bool set){
+		GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
+		foreach(GameObject obj in objects){
+			obj.SetActive(set);
+		}
 	}
 }

@@ -6,19 +6,33 @@ ModelImporter:
     100000: grappleHook
     100002: //RootNode
     100004: gunBase
+    100006: blaster
+    100008: portal
     400000: grappleHook
     400002: //RootNode
     400004: gunBase
+    400006: blaster
+    400008: portal
     2300000: grappleHook
     2300002: gunBase
+    2300004: blaster
+    2300006: portal
     3300000: grappleHook
     3300002: gunBase
+    3300004: blaster
+    3300006: portal
     4300000: gunBase
     4300002: grappleHook
+    4300004: blaster
+    4300006: portal
     7400000: gunBase|tool-in
     7400002: gunBase|tool-out
     7400004: grappleHook|tool-in
     7400006: grappleHook|tool-out
+    7400008: blaster|tool-in
+    7400010: blaster|tool-out
+    7400012: portal|tool-in
+    7400014: portal|tool-out
     9500000: //RootNode
   materials:
     importMaterials: 1

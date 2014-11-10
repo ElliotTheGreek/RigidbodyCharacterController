@@ -3,31 +3,33 @@ using System.Collections;
 
 public class PlayerControllerAdvanced : MonoBehaviour {
 	GameController gameController;
-	RigidbodyCharactorController rcc;
+	RigidbodyCharacterController rcc;
 	public Camera camera;
 	public float mouseSensitivity = 2f;
 	float verticalAngleLimit = 90.0f;
 	float verticalRotation = 0f;
+	InputController input;
 
 	public int maxJumps = 3;
 	public int jumps = 0;
 	void Start () {
+		input = GameObject.FindGameObjectWithTag ("GameController").GetComponent<InputController> ();
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
-		rcc = gameObject.GetComponent<RigidbodyCharactorController> ();
+		rcc = gameObject.GetComponent<RigidbodyCharacterController> ();
 		rcc.maxSpeed = 5f;
 	}
 	
 	void Update () {
 		/* Rotate our main transform left and right */
 		float yaw = 0;
-		if(gameController.platform == "Desktop"){ yaw = Input.GetAxis ("Mouse X");}
-		if(gameController.platform == "Android"){ yaw = Input.acceleration.x;}
+		if(gameController.platform == "Desktop"){ yaw = input.GetAxis ("Mouse X");}
+		if(gameController.platform == "Android"){ yaw = input.GetAcceleration().x * 2;}
 		transform.Rotate (0, yaw*mouseSensitivity, 0);
-		Debug.Log ("Mode:"+gameController.platform);
+
 		/* Rotate our attached camera up and down
 		while staying within our desired angle range */		
-		if(gameController.platform == "Desktop"){verticalRotation -= Input.GetAxis ("Mouse Y") * mouseSensitivity;}
-		if(gameController.platform == "Android"){verticalRotation -= ((Input.acceleration.y - gameController.accelCenter.y) * -1) * mouseSensitivity;}
+		if(gameController.platform == "Desktop"){verticalRotation -= input.GetAxis ("Mouse Y") * mouseSensitivity;}
+		if(gameController.platform == "Android"){verticalRotation -= ((input.GetAcceleration().z *2)) * (mouseSensitivity);}
 
 		verticalRotation = Mathf.Clamp (verticalRotation, -verticalAngleLimit, verticalAngleLimit);
 		camera.transform.localRotation = Quaternion.Euler (verticalRotation, 0, 0);
@@ -40,8 +42,8 @@ public class PlayerControllerAdvanced : MonoBehaviour {
 		/* Movement control */
 		float moveForce = 4f;
 		if(!rcc.IsGrounded()){moveForce = 0.1f;}	// reduce player control greatly if in the air ( 0 is most realistic )
-		float forwardSpeed = Input.GetAxis ("Vertical") * moveForce;
-		float sideSpeed = Input.GetAxis ("Horizontal") * moveForce;
+		float forwardSpeed = input.GetAxis ("Vertical") * moveForce;
+		float sideSpeed = input.GetAxis ("Horizontal") * moveForce;
 		
 		Vector3 moveVector = new Vector3 (sideSpeed, 0, forwardSpeed);
 		moveVector = transform.rotation * moveVector;

@@ -6,23 +6,18 @@ public class RopeController : MonoBehaviour {
 	Rigidbody anchorBody;
 	float maxDistance = 0f;
 	float distance = 0f;
-	bool _rope = false;
+	public bool _rope = false;
 	public float ropeBounce = 50;
 	public bool _dynamic = false;
 	PlayerControllerAdvanced player;
 	LineRenderer lineRender;
 	public GameObject ropeObject;
 	CapsuleCollider capsule;
+	RopeSegment segment;
 
 	void Awake(){
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerControllerAdvanced> ();
 		lineRender = gameObject.GetComponent<LineRenderer> ();
-		capsule = ropeObject.AddComponent<CapsuleCollider> ();
-		capsule.radius = 0.05f / 2;
-		capsule.center = Vector3.zero;
-		capsule.direction = 2;
-		capsule.isTrigger = true;
-		capsule.enabled = false;
 	}
 
 	public void CreateRope(Rigidbody anchor, Rigidbody player){
@@ -32,19 +27,31 @@ public class RopeController : MonoBehaviour {
 
 		maxDistance = (anchorBody.position - playerBody.position).magnitude;
 		lineRender.enabled = true;
-		capsule.enabled = true;
+		segment = ropeObject.AddComponent<RopeSegment> ();
+		capsule = ropeObject.AddComponent<CapsuleCollider> ();
+		capsule.radius = 0.05f / 2;
+		capsule.center = Vector3.zero;
+		capsule.direction = 2;
+		capsule.isTrigger = true;
 	}
 
 	public void DestroyRope(){
+		Destroy (capsule);
+		Destroy (segment);
 		lineRender.enabled = false;
-		capsule.enabled = false;
 		_rope = false;
+	}
+	
+	public void RopeAdjust(float dif){
+		maxDistance += dif;
 	}
 
 	void Update(){
 		if(_rope){
-			float dif = Input.GetAxis("Mouse ScrollWheel");
-			maxDistance += dif*2;
+			//float dif = Input.GetAxis("Mouse ScrollWheel");
+			//if(dif != 0){
+			//	RopeAdjust(dif);
+			//}
 
 			if(maxDistance<1){maxDistance = 1;}
 			distance = (anchorBody.position - playerBody.position).magnitude;
@@ -74,21 +81,8 @@ public class RopeController : MonoBehaviour {
 			//}
 		}
 	}
-
-	void OnTriggerEnter(Collider other){
-		if(other.tag != "Player"){
-		//	Debug.Log ("Hit Enter on "+other.tag);
-		}
-	}
-
-	void OnCollisionStay(Collision collision){
-		Debug.Log ("Enter");
-	//	foreach(ContactPoint col in collision.contacts){
-	//		Vector3 point = col.point;
-	//		Debug.Log ("Hit at "+point+ "ON "+collision.gameObject.tag);
-	//	}
-	}
 	
+
 	void ConstrainTarget(Rigidbody from, Rigidbody to, float stepSize){
 		float step = distance - maxDistance;
 		Vector3 old = from.position;
