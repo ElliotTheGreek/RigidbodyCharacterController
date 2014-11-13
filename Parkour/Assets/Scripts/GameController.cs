@@ -6,6 +6,8 @@ public class GameController : MonoBehaviour {
 	public string platform = "Desktop";
 	public GameObject UIDesktop, UIAndroid;
 
+	public Vector3 gravity = new Vector3(0, -10, 0);
+
 	void Start () {
 		if (Application.platform == RuntimePlatform.Android){
 			platform = "Android";
@@ -17,11 +19,18 @@ public class GameController : MonoBehaviour {
 			EnableUI("UI-Android", false);
 		}
 	}
+	
+	void Update(){
+	}
 
 	void EnableUI(string tag, bool set){
 		GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
 		foreach(GameObject obj in objects){
 			obj.SetActive(set);
 		}
+	}
+
+	public Vector3 getGravityVector(){
+		return gravity;
 	}
 }

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ClimberGame.cs" />
+     <Compile Include="Assets\Scripts\DynamicObject.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\GunScripts\BlasterController.cs" />
      <Compile Include="Assets\Scripts\GunScripts\Explosion.cs" />

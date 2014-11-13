@@ -135,7 +135,7 @@ public class GrappleController : MonoBehaviour {
 				joint.enableCollision = true;
 				joint.targetPosition = transform.position;
 				rope._dynamic = false;
-				rope.CreateRope(rigidbody, gun.getPlayer().rigidbody, gunBase.transform);
+				rope.CreateRope(rigidbody, gun.getPlayer().transform.parent.rigidbody, gunBase.transform);
 			} else {
 				//rigidbody.velocity = new Vector3(0,0,0);
 				//Debug.Log ("Attach Non-Kinematic Grapple To "+rigid.tag);

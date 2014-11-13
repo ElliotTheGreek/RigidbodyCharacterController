@@ -13,11 +13,13 @@ public class RigidbodyCharacterController : MonoBehaviour {
 	public float maxSpeed = 5;
 	float stepHeight = 0.35f;
 	public bool _limitSpeed = true;
+	GameController game;
 	void Start()
 	{
 		distToGround = collider.bounds.extents.y;
 		distToSide = collider.bounds.extents.x;
 		Screen.lockCursor = true;
+		game = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
 
 	}
 
@@ -36,19 +38,19 @@ public class RigidbodyCharacterController : MonoBehaviour {
 	void TryStep(float difference, Vector3 point){
 		Debug.Log ("Step up " + difference);
 		//if(Physics.Raycast(transform.position, (transform.rotation * Vector3.right), distToSide + 0.1f)){
-			Vector3 half = Vector3.Lerp(rigidbody.position, point, 0.5f);
+			Vector3 half = Vector3.Lerp(transform.parent.rigidbody.position, point, 0.5f);
 			Vector3 newPos = new Vector3(half.x, point.y + distToGround + 0.2f, half.z);
-			rigidbody.position = newPos;
+			transform.parent.rigidbody.position = newPos;
 		//}
 	}
 
 /* Only apply drag/maxspeed to our forward and side movement (don't drag along gravity) */
 	public void LimitSpeed(){
-		Vector3 moveSpeed = new Vector3 (rigidbody.velocity.x, 0, rigidbody.velocity.z);
+		Vector3 moveSpeed = new Vector3 (transform.parent.rigidbody.velocity.x, transform.parent.rigidbody.velocity.y, transform.parent.rigidbody.velocity.z);
 		if(moveSpeed.magnitude > maxSpeed)
 		{
 			Vector3 store = moveSpeed.normalized * maxSpeed;
-			rigidbody.velocity = new Vector3(store.x, rigidbody.velocity.y, store.z);
+			transform.parent.rigidbody.velocity = new Vector3(store.x, store.y, store.z);
 		}
 	}
 
@@ -57,11 +59,14 @@ public class RigidbodyCharacterController : MonoBehaviour {
 	lerpForce 0 means the falling velocity will not reset, so the upward force will merely be added (more realistic)
  	lerpForce 1 means the falling velocity will be reset to 0 ( generally for for double jumping ) */
 	public void Jump(float force, float lerpForce){
-		if((rigidbody.velocity.y<0) & (lerpForce>0)){
-			float dropSpeed = Mathf.Lerp(rigidbody.velocity.y, 0, lerpForce);
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x, dropSpeed, rigidbody.velocity.z);
-		}
-		verticalVelocity = force;
+		Vector3 forceVector = game.getGravityVector () * -force;
+		transform.parent.rigidbody.AddForce (forceVector);
+
+		//if((transform.parent.rigidbody.velocity.y<0) & (lerpForce>0)){
+		//	float dropSpeed = Mathf.Lerp(transform.parent.rigidbody.velocity.y, 0, lerpForce);
+		//	transform.parent.rigidbody.velocity = new Vector3(transform.parent.rigidbody.velocity.x, dropSpeed, transform.parent.rigidbody.velocity.z);
+		//}
+		//verticalVelocity = force;
 	}
 
 	void Update () {
@@ -72,30 +77,34 @@ public class RigidbodyCharacterController : MonoBehaviour {
 /* Now manipulate the rigid body's movement   */
 		if(_grounded){
 			if(_FullStop){
-				if(!_moving){rigidbody.drag = 20;} else {rigidbody.drag = 0.5f;}
+				if(!_moving){transform.parent.rigidbody.drag = 20;} else {transform.parent.rigidbody.drag = 0.5f;}
 			}
 		} else {
-			rigidbody.drag = 0.1f;
-			verticalVelocity += (Physics.gravity.y * GRAVITY) * Time.deltaTime;
+			transform.parent.rigidbody.drag = 0.1f;
+			//verticalVelocity += (Physics.gravity.y * GRAVITY) * Time.deltaTime;
 			//Debug.Log("Vet"+verticalVelocity);
 		}
 
 
 
 		Vector3 gravity = new Vector3(0, verticalVelocity, 0);
-		rigidbody.AddForce (gravity);
+		transform.parent.rigidbody.AddForce (gravity);
 		verticalVelocity = 0;
-		if(_limitSpeed){
+		if (_grounded) {
 			LimitSpeed ();
+		//} else {
+		//	if(_limitSpeed){
+		//		LimitSpeed ();
+		//	}
 		}
 	}
 
 	public void Move(Vector3 move){
-		rigidbody.AddForce (move, ForceMode.VelocityChange);
+		transform.parent.rigidbody.AddForce (move, ForceMode.VelocityChange);
 	}
 
 	public void Nudge(Vector3 move){
-		rigidbody.AddForce (move);
+		transform.parent.rigidbody.AddForce (move);
 	}
 
 	void UpdateBools(){
@@ -111,10 +120,10 @@ public class RigidbodyCharacterController : MonoBehaviour {
 			_rightWall = false;
 		}
 		
-		if(Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f)){
+		if(Physics.Raycast(transform.position, game.getGravityVector(), distToGround + 0.1f)){
 			if(!_grounded){
 				if(_FullStop){
-					rigidbody.velocity = new Vector3(0, 0, 0);
+					transform.parent.rigidbody.velocity = new Vector3(0, 0, 0);
 				}
 			}
 			_grounded = true;
