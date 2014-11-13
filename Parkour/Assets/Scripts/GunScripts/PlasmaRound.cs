@@ -15,6 +15,10 @@ public class PlasmaRound : MonoBehaviour {
 		Boom ();
 	}
 
+	void OnCollisionStay(Collision collision){
+		Boom ();
+	}
+
 	void Boom(){
 		GameObject clone = (GameObject) Instantiate (explosion, transform.position, transform.rotation);
 		Destroy (gameObject);

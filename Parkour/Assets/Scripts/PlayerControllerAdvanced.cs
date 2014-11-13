@@ -31,7 +31,16 @@ public class PlayerControllerAdvanced : MonoBehaviour {
 		if(gameController.platform == "Desktop"){verticalRotation -= input.GetAxis ("Mouse Y") * mouseSensitivity;}
 		if(gameController.platform == "Android"){verticalRotation -= ((input.GetAcceleration().z *2)) * (mouseSensitivity);}
 
-		verticalRotation = Mathf.Clamp (verticalRotation, -verticalAngleLimit, verticalAngleLimit);
+
+		Debug.Log ("Rot:"+verticalRotation);
+		if(rcc.IsGrounded()){
+			float rate = 5f;
+			while(verticalRotation>360){ verticalRotation -= 360; }
+			while(verticalRotation<-360){ verticalRotation += 360;}
+			if(verticalRotation < -verticalAngleLimit){ verticalRotation = Mathf.Lerp(verticalRotation, -verticalAngleLimit, Time.deltaTime * rate);}
+			if(verticalRotation > verticalAngleLimit){ verticalRotation = Mathf.Lerp(verticalRotation, verticalAngleLimit, Time.deltaTime * rate);}
+//			verticalRotation = Mathf.Clamp (verticalRotation, -verticalAngleLimit, verticalAngleLimit);
+		}
 		camera.transform.localRotation = Quaternion.Euler (verticalRotation, 0, 0);
 		
 		/* Jump Control */
@@ -41,7 +50,7 @@ public class PlayerControllerAdvanced : MonoBehaviour {
 		
 		/* Movement control */
 		float moveForce = 4f;
-		if(!rcc.IsGrounded()){moveForce = 0.1f;}	// reduce player control greatly if in the air ( 0 is most realistic )
+		if(!rcc.IsGrounded()){moveForce = 0.5f;}	// reduce player control greatly if in the air ( 0 is most realistic )
 		float forwardSpeed = input.GetAxis ("Vertical") * moveForce;
 		float sideSpeed = input.GetAxis ("Horizontal") * moveForce;
 		
@@ -60,12 +69,25 @@ public class PlayerControllerAdvanced : MonoBehaviour {
 			jumps++;
 		} else {
 			if(jumps<maxJumps){
-				rcc.Jump(500, 0.9f);
+				rcc.Jump(600, 1);
 				jumps++;
+				float forwardSpeed = input.GetAxis ("Vertical") * 50;
+				float sideSpeed = input.GetAxis ("Horizontal") * 50;
+				
+				Vector3 moveVector = new Vector3 (sideSpeed, 0, forwardSpeed);
+				moveVector = transform.rotation * moveVector;
+				
+				rcc.Nudge (moveVector);
+
+			
 			}
 		}
 	}
-	
+
+	public void SetLimitSpeed(bool set){
+		rcc._limitSpeed = set;
+	}
+
 	public Camera getCamera(){
 		return camera;
 	}

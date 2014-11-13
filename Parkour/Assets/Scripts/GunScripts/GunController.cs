@@ -10,6 +10,8 @@ public class GunController: MonoBehaviour {
 /* the various tool controllers */
 	public GrappleController grapple;
 	public BlasterController blaster;
+	public bool _resetAngle = true;
+	public Transform baseTX;
 	int totalTools = 2;
 	/* 0 = grapple, 1 = blaster */
 	int toolInUse = 0;
@@ -17,9 +19,17 @@ public class GunController: MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerControllerAdvanced> ();
 		anim = gameObject.GetComponent<Animator> ();
 		hash = GameObject.FindGameObjectWithTag ("GameController").GetComponent<HashIDs> ();
+		baseTX.rotation = new Quaternion(0,0,0,0);
 	}
 
 	void Update(){
+		if(_resetAngle){
+			//if(baseTX.rotation != null){
+			//baseTX.rotation = Quaternion.Lerp(baseTX.rotation, new Quaternion (0,0,0,0), 0.95f);
+			baseTX.rotation = new Quaternion (0,0,0,0);
+			//}
+			
+		}
 		int currentTool = toolInUse;
 		float scroll = Input.GetAxis ("Mouse ScrollWheel");
 		if(scroll>0){toolInUse++;}

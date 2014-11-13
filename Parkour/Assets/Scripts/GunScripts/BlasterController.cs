@@ -4,6 +4,7 @@ using System.Collections;
 public class BlasterController : MonoBehaviour {
 	public GameObject plasmaRound;
 	public Transform gunExit;
+	public Rigidbody baseBody;
 	GunController gun;
 
 	void Start(){
@@ -18,9 +19,9 @@ public class BlasterController : MonoBehaviour {
 
 	void Fire(){
 		GameObject clone = (GameObject) Instantiate (plasmaRound, gunExit.position, gunExit.rotation);
-		Vector3 force = new Vector3 (0, 0, 500);
+		Vector3 force = new Vector3 (0, 0, 1500);
 		Transform baseTX = gun.getPlayer().getCamera().gameObject.transform;
-		clone.rigidbody.velocity = gun.transform.parent.transform.parent.rigidbody.velocity;
+		clone.rigidbody.velocity = baseBody.velocity;
 		clone.rigidbody.AddForce (baseTX.rotation * force);
 	}
 }

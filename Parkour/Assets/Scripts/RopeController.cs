@@ -2,43 +2,50 @@
 using System.Collections;
 
 public class RopeController : MonoBehaviour {
-	Rigidbody playerBody;
-	Rigidbody anchorBody;
+	public Rigidbody playerBody;
+	public Rigidbody anchorBody;
 	float maxDistance = 0f;
 	float distance = 0f;
 	public bool _rope = false;
 	public float ropeBounce = 50;
 	public bool _dynamic = false;
+	public Transform gunExit;
 	PlayerControllerAdvanced player;
 	LineRenderer lineRender;
 	public GameObject ropeObject;
 	CapsuleCollider capsule;
 	RopeSegment segment;
-
+	Transform baseTx;
 	void Awake(){
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerControllerAdvanced> ();
 		lineRender = gameObject.GetComponent<LineRenderer> ();
 	}
 
-	public void CreateRope(Rigidbody anchor, Rigidbody player){
+	public void CreateRope(Rigidbody anchor, Rigidbody play, Transform baseTX){
+		baseTx = baseTX;
 		_rope = true;
 		anchorBody = anchor;
-		playerBody = player;
+		playerBody = play;
 
 		maxDistance = (anchorBody.position - playerBody.position).magnitude;
-		lineRender.enabled = true;
+//		lineRender.enabled = true;
 		segment = ropeObject.AddComponent<RopeSegment> ();
 		capsule = ropeObject.AddComponent<CapsuleCollider> ();
 		capsule.radius = 0.05f / 2;
 		capsule.center = Vector3.zero;
 		capsule.direction = 2;
 		capsule.isTrigger = true;
+		player.SetLimitSpeed (false);
 	}
 
 	public void DestroyRope(){
+		player.SetLimitSpeed (true);
+		//		if(baseTx != null){
+//			baseTx.rotation.Set(0,0,0,0);
+//		}
 		Destroy (capsule);
 		Destroy (segment);
-		lineRender.enabled = false;
+//		lineRender.enabled = false;
 		_rope = false;
 	}
 	
@@ -47,7 +54,13 @@ public class RopeController : MonoBehaviour {
 	}
 
 	void Update(){
+		lineRender.SetPosition (0, anchorBody.position);
+		lineRender.SetPosition (1, gunExit.position);
 		if(_rope){
+			if(baseTx != null){
+				baseTx.LookAt (anchorBody.position);
+			//	baseTx.Rotate(new Vector3(0, 90, 0));
+			}
 			//float dif = Input.GetAxis("Mouse ScrollWheel");
 			//if(dif != 0){
 			//	RopeAdjust(dif);
@@ -69,8 +82,6 @@ public class RopeController : MonoBehaviour {
 					ConstrainTarget(playerBody, anchorBody, 1f);
 				}
 			}
-			lineRender.SetPosition (0, anchorBody.position);
-			lineRender.SetPosition (1, playerBody.position);
 
 			Vector3 half = Vector3.Lerp(anchorBody.position, playerBody.position, 0.5f);
 			capsule.transform.position = anchorBody.position + (playerBody.position - anchorBody.position) / 2;

@@ -5,16 +5,15 @@ public class GrappleController : MonoBehaviour {
 	bool _canFire = true;
 	ConfigurableJoint joint;
 	FixedJoint fixedJoint;
-	public Transform gunExit, anchorPlayer;
+	public Transform gunExit, anchorPlayer, gunBase;
 	GunController gun;
 	bool _attached = false;
 	public Transform hook;
 	RopeController rope;
+	public Rigidbody baseBody;
 	void Start(){
 		gun = transform.parent.GetComponent<GunController> ();
 		rope = gameObject.GetComponent<RopeController> ();
-//		lineRender = gameObject.GetComponent<LineRenderer> ();
-//		lineRender.enabled = false;
 	}
 
 	public void UpdateTool () {
@@ -36,6 +35,8 @@ public class GrappleController : MonoBehaviour {
 	}
 
 	public void ResetGrapple(){
+		gun._resetAngle = true;
+
 		if(joint != null){
 			Destroy (joint);
 			joint = null;
@@ -60,6 +61,8 @@ public class GrappleController : MonoBehaviour {
 		_attached = false;
 		rigidbody.isKinematic = true;
 		rigidbody.transform.parent = gun.transform;
+		gameObject.GetComponent<SphereCollider> ().enabled = true;
+
 	}
 	
 	public void RopeOut(){
@@ -67,7 +70,7 @@ public class GrappleController : MonoBehaviour {
 	}
 	
 	public void RopeIn(){
-		rope.RopeAdjust (-0.05f);
+		rope.RopeAdjust (-0.1f);
 	}
 
 	public void ButtonFire(){
@@ -84,9 +87,11 @@ public class GrappleController : MonoBehaviour {
 		_canFire = false;
 		rigidbody.isKinematic = false;
 		rigidbody.transform.parent = null;
-		Vector3 force = new Vector3 (0, 0, 1000);
+		Vector3 force = new Vector3 (0, 0, 1500);
 		Transform baseTX = gun.getPlayer().getCamera().gameObject.transform;
+		rigidbody.velocity = Vector3.Lerp(baseBody.velocity, new Vector3(0,0,0), 0);
 		rigidbody.AddForce (baseTX.rotation * force);
+		gameObject.GetComponent<SphereCollider> ().enabled = true;
 	}
 
 	void OnTriggerEnter(Collider other){
@@ -114,6 +119,7 @@ public class GrappleController : MonoBehaviour {
 
 	void AttachGrapple(Rigidbody rigid){
 		if(!_attached){
+			gun._resetAngle = false;
 			if(rigid.isKinematic){
 				//Debug.Log ("Attach Kinematic Grapple To "+rigid.tag);
 				_attached = true;
@@ -129,7 +135,7 @@ public class GrappleController : MonoBehaviour {
 				joint.enableCollision = true;
 				joint.targetPosition = transform.position;
 				rope._dynamic = false;
-				rope.CreateRope(rigidbody, gun.getPlayer().rigidbody);
+				rope.CreateRope(rigidbody, gun.getPlayer().rigidbody, gunBase.transform);
 			} else {
 				//rigidbody.velocity = new Vector3(0,0,0);
 				//Debug.Log ("Attach Non-Kinematic Grapple To "+rigid.tag);
@@ -138,7 +144,7 @@ public class GrappleController : MonoBehaviour {
 				fixedJoint.connectedBody = rigid;
 				fixedJoint.enableCollision = true;
 				rope._dynamic = true;
-				rope.CreateRope(rigidbody, gun.getPlayer().rigidbody);
+				rope.CreateRope(rigidbody, gun.getPlayer().rigidbody, gunBase.transform);
 			}
 		}
 	}

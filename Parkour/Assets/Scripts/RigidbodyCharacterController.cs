@@ -12,6 +12,7 @@ public class RigidbodyCharacterController : MonoBehaviour {
 	public bool _leftWall = false, _rightWall = false, _grounded = false;
 	public float maxSpeed = 5;
 	float stepHeight = 0.35f;
+	public bool _limitSpeed = true;
 	void Start()
 	{
 		distToGround = collider.bounds.extents.y;
@@ -84,13 +85,17 @@ public class RigidbodyCharacterController : MonoBehaviour {
 		Vector3 gravity = new Vector3(0, verticalVelocity, 0);
 		rigidbody.AddForce (gravity);
 		verticalVelocity = 0;
-		if(_grounded){
+		if(_limitSpeed){
 			LimitSpeed ();
 		}
 	}
 
 	public void Move(Vector3 move){
 		rigidbody.AddForce (move, ForceMode.VelocityChange);
+	}
+
+	public void Nudge(Vector3 move){
+		rigidbody.AddForce (move);
 	}
 
 	void UpdateBools(){

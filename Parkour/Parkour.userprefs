@@ -1,10 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerControllerAdvanced.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GunScripts\GrappleController.cs">
     <Files>
-      <File FileName="Assets\Scripts\PlayerControllerAdvanced.cs" Line="32" Column="94" />
-      <File FileName="Assets\Scripts\InputController.cs" Line="46" Column="179" />
-      <File FileName="Assets\Scripts\GunScripts\GrappleController.cs" Line="19" Column="2" />
+      <File FileName="Assets\Scripts\ClimberGame.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GunScripts\GrappleController.cs" Line="140" Column="47" />
+      <File FileName="Assets\Scripts\RopeController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GunScripts\GunController.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

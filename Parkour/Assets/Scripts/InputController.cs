@@ -42,8 +42,8 @@ public class InputController : MonoBehaviour {
 			}
 		}
 		Vector3 newAccel = (Input.acceleration - accelOffset);
-		debug1.text = "Device Accel \n X:"+Round(Input.acceleration.x) +" Y:"+Round (Input.acceleration.y)+ " Z:"+Round(Input.acceleration.z);
-		debug2.text = "Accel Offset \n X:"+Round(accelOffset.x) +" Y:"+Round(accelOffset.y)+ " Z:"+Round(accelOffset.z) +"\n New Accel \n X:"+Round(newAccel.x) +" Y:"+Round(newAccel.y)+ " Z:"+Round(newAccel.z);
+	//	debug1.text = "Device Accel \n X:"+Round(Input.acceleration.x) +" Y:"+Round (Input.acceleration.y)+ " Z:"+Round(Input.acceleration.z);
+	//	debug2.text = "Accel Offset \n X:"+Round(accelOffset.x) +" Y:"+Round(accelOffset.y)+ " Z:"+Round(accelOffset.z) +"\n New Accel \n X:"+Round(newAccel.x) +" Y:"+Round(newAccel.y)+ " Z:"+Round(newAccel.z);
 		//debug2.text = (Input.acceleration - accelOffset) + " From " + accelOffset;
 	}
 
