@@ -13,6 +13,10 @@ public class GameController : MonoBehaviour {
 			platform = "Android";
 			EnableUI("UI-Android", true);
 			EnableUI("UI-Desktop", false);
+		} else if (Application.platform == RuntimePlatform.IPhonePlayer){
+			platform = "Android";
+			EnableUI("UI-Desktop", false);
+			EnableUI("UI-Android", true);
 		} else {
 			platform = "Desktop";
 			EnableUI("UI-Desktop", true);
